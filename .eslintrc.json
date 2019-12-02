@@ -16,8 +16,19 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
-    "import/prefer-default-export": "off"
+    "no-underscore-dangle": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".js"],
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
+        ]
+      }
+    }
   }
 }
