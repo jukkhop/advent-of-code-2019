@@ -2232,9 +2232,9 @@ ts-node@^8.5.4:
     yn "^3.0.0"
 
 ts-toolbelt@^4.10.7:
-  version "4.12.8"
-  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-4.12.8.tgz#c9da4febb76aa88ec44e6c3a03fb7713d396b357"
-  integrity sha512-RffgzBVRdSoBZxgd8oIuX9h0Q2ouyG/mF+NdXxvj/qywAXITAoB2aQWIn8QxjiY2E2QONn9ZI0XLVgfrB2pCnQ==
+  version "4.12.11"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-4.12.11.tgz#cad7a5c55488bb9888fbe9d0d6ea88e9b570e670"
+  integrity sha512-hzMlJbTOcXCgr5MaGc7soKbnnsOb2iCI+eGSrPL7wLQQ/6GugrBtHGBT8HFmKdzIpqeEeVyoTtB+g2LUOVzb0A==
 
 tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
