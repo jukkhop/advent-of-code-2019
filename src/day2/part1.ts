@@ -32,30 +32,23 @@ export function run(
   memory[2] = input2;
 
   for (let i = 0; i < memory.length; i += 4) {
-    const instruction = memory.slice(i, i + 4);
-    const code = operate(instruction, memory);
+    const [opcode, p1, p2, p3] = memory.slice(
+      i,
+      i + 4,
+    );
 
-    if (code === 99) {
+    if (opcode === 99) {
       break;
+    }
+
+    const op = getOperation(opcode);
+
+    if (op) {
+      memory[p3] = op(memory[p1], memory[p2]);
     }
   }
 
   return memory[0];
-}
-
-function operate(
-  instruction: number[],
-  memory: number[],
-) {
-  const [code, p1, p2, p3] = instruction;
-  const op = getOperation(code);
-
-  if (op) {
-    // eslint-disable-next-line no-param-reassign
-    memory[p3] = op(memory[p1], memory[p2]);
-  }
-
-  return code;
 }
 
 function getOperation(code: number): Operation {
