@@ -4,21 +4,22 @@ import {
   map,
   pipe,
   subtract,
-  sum,
-} from 'ramda';
+  sum
+} from 'ramda'
 
 export const calc = pipe(
   divide(__, 3.0),
   Math.floor,
-  subtract(__, 2),
-);
+  subtract(__, 2)
+)
 
 function main(inputs: string[]) {
   return pipe(
+    //
     map(Number),
     map(calc),
-    sum,
-  )(inputs);
+    sum
+  )(inputs)
 }
 
-export default main;
+export default main

@@ -9,32 +9,32 @@ import {
   reduced,
   repeat,
   split,
-  zip,
-} from 'ramda';
+  zip
+} from 'ramda'
 
-import { run } from './part1';
+import { run } from './part1'
 
 function main(inputs: string[]) {
   const program = chain(
     pipe(
       split(','),
       filter(Boolean),
-      map(Number),
+      map(Number)
     ),
-    inputs,
-  );
+    inputs
+  )
 
-  const high = 100;
-  const rng = range(0, high);
+  const high = 100
+  const rng = range(0, high)
 
   const pairs: [number, number][] = chain(
     pipe(
       // @ts-ignore
       repeat(__, high),
-      zip(rng),
+      zip(rng)
     ),
-    rng,
-  );
+    rng
+  )
 
   const result = reduce(
     (_, [noun, verb]) =>
@@ -42,14 +42,14 @@ function main(inputs: string[]) {
         ? reduced(100 * noun + verb)
         : 0,
     0,
-    pairs,
-  );
+    pairs
+  )
 
   if (!result) {
-    throw new Error('Result not found');
+    throw new Error('Result not found')
   }
 
-  return result;
+  return result
 }
 
-export default main;
+export default main

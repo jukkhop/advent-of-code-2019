@@ -3,7 +3,7 @@ module Part2 where
 import Prelude
 import Control.Plus (empty)
 import Data.Array ((..))
-import Data.Maybe (Maybe(Just, Nothing))
+import Data.Maybe (fromMaybe)
 import Effect (Effect)
 import Effect.Console (logShow)
 import Part1 (input, run1)
