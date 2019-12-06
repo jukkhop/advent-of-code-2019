@@ -21,7 +21,7 @@ function main(inputs: string[]) {
   return run(program, 12, 2)
 }
 
-export function run(
+function run(
   program: number[],
   input1: number,
   input2: number
@@ -69,3 +69,5 @@ type Operation =
   | undefined
 
 export default main
+
+export { run }

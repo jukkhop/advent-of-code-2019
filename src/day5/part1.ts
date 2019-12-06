@@ -1,8 +1,6 @@
 import { filter, map, pipe, split } from 'ramda'
 
-function main(inputs: string[]) {
-  const [input] = inputs
-
+function main([input]: string[]) {
   const program = pipe(
     split(','),
     filter(Boolean),
@@ -12,7 +10,7 @@ function main(inputs: string[]) {
   return run(program, 1)
 }
 
-export function run(
+function run(
   program: number[],
   input: number
 ): number[] {
@@ -95,3 +93,5 @@ export function run(
 }
 
 export default main
+
+export { run }

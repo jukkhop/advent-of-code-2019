@@ -7,7 +7,7 @@ import {
   sum
 } from 'ramda'
 
-export const calc = pipe(
+const calc = pipe(
   divide(__, 3.0),
   Math.floor,
   subtract(__, 2)
@@ -23,3 +23,5 @@ function main(inputs: string[]) {
 }
 
 export default main
+
+export { calc }
