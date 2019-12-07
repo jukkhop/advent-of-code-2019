@@ -1,5 +1,3 @@
-/* eslint-disable no-constant-condition */
-
 import { Node, build, depth, find } from './part1'
 
 function main(inputs: string[]) {
@@ -20,7 +18,7 @@ function main(inputs: string[]) {
 function lca(a: Node, b: Node): Node | null {
   let { parent } = a
 
-  while (true) {
+  for (;;) {
     if (!parent) {
       return null
     }

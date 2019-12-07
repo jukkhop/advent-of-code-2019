@@ -1,23 +1,51 @@
-import { filter, map, pipe, split } from 'ramda'
+/* eslint-disable no-param-reassign */
+
+import { apply, head, last, pipe } from 'ramda'
+import { combinations } from './part1'
+
+const TERM_SIGNAL = Number.MAX_SAFE_INTEGER
 
 function main([input]: string[]) {
-  const program = pipe(
-    split(','),
-    filter(Boolean),
-    map(Number)
-  )(input)
+  const program = input
+    .split(',')
+    .filter(Boolean)
+    .map(Number)
 
-  return run(program, [5])
+  const sequences = combinations(5, 10)
+
+  const outputs = sequences.map(seq => {
+    const memory = seq.map(() => program.slice())
+    const pointer = seq.map(() => 0)
+    const io = seq.map(x => [x])
+
+    io[0].push(0)
+
+    for (;;) {
+      seq.forEach((_, i) => {
+        pointer[i] = run(
+          memory[i],
+          pointer[i],
+          io[i],
+          io[i < memory.length - 1 ? i + 1 : 0]
+        )
+      })
+
+      if (last(pointer) === TERM_SIGNAL) {
+        return pipe(head, last)(io)
+      }
+    }
+  })
+
+  return apply(Math.max, outputs)
 }
 
 function run(
-  program: number[],
-  inputs: number[]
-): number[] {
-  const memory = program.slice()
-  const output = new Array<number>()
-
-  let pointer = 0
+  memory: number[],
+  start: number,
+  input: number[],
+  output: number[]
+): number {
+  let pointer = start
 
   while (pointer < memory.length) {
     const next = memory[pointer]
@@ -44,6 +72,7 @@ function run(
     } else if ([5, 6].includes(opcode)) {
       incr = 3
     } else if (opcode === 99) {
+      pointer = TERM_SIGNAL
       break
     } else {
       throw new Error(`Bad opcode: ${opcode}`)
@@ -53,8 +82,6 @@ function run(
       pointer + 1,
       pointer + incr
     )
-
-    pointer += incr
 
     const values = params.map((p, idx) => {
       const mode = modes[idx]
@@ -76,36 +103,43 @@ function run(
     switch (opcode) {
       case 1:
         memory[p2] = v0 + v1
+        pointer += incr
         break
       case 2:
         memory[p2] = v0 * v1
+        pointer += incr
         break
       case 3:
-        memory[p0] = inputs.shift() || 0
+        if (input.length === 0) {
+          return pointer
+        }
+        memory[p0] = input.shift() || 0
+        pointer += incr
         break
       case 4:
         output.push(v0)
+        pointer += incr
         break
       case 5:
-        if (v0 !== 0) pointer = v1
+        pointer = v0 !== 0 ? v1 : pointer + incr
         break
       case 6:
-        if (v0 === 0) pointer = v1
+        pointer = v0 === 0 ? v1 : pointer + incr
         break
       case 7:
         memory[p2] = v0 < v1 ? 1 : 0
+        pointer += incr
         break
       case 8:
         memory[p2] = v0 === v1 ? 1 : 0
+        pointer += incr
         break
       default:
         throw new Error('Failed to match opcode')
     }
   }
 
-  return output
+  return pointer
 }
 
 export default main
-
-export { run }
