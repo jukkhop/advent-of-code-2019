@@ -1,8 +1,6 @@
 import {
   countBy,
   identity,
-  map,
-  reduce,
   splitEvery
 } from 'ramda'
 
@@ -17,17 +15,16 @@ function main([input]: string[]) {
     digits
   )
 
-  const stats = map(countBy(identity), layers)
+  const stats = layers.map(countBy(identity))
 
-  const fewest = reduce(
+  const fewest = stats.reduce(
     // @ts-ignore
     (acc, cur) => {
       const zcur = cur[0] || 0
       const zacc = acc[0] || 0
       return zcur < zacc ? cur : acc
     },
-    { '0': Number.MAX_SAFE_INTEGER },
-    stats
+    { '0': Number.MAX_SAFE_INTEGER }
   )
 
   return fewest[1] * fewest[2]

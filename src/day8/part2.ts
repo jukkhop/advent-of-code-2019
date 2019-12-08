@@ -1,7 +1,6 @@
 import {
+  defaultTo,
   range,
-  reduce,
-  reduced,
   splitEvery
 } from 'ramda'
 
@@ -14,55 +13,87 @@ function main([input]: string[]) {
   const layers = splitEvery(
     WIDTH * HEIGHT,
     digits
-  ).reverse()
+  )
 
-  const pixels = [[new Array<number>()]]
+  const pixels = initTensor(
+    WIDTH,
+    HEIGHT,
+    layers.length,
+    -1
+  )
 
-  layers.forEach((layer, z) => {
+  layers.reverse().forEach((layer, z) => {
     const rows = splitEvery(WIDTH, layer)
 
     rows.forEach((row, y) => {
       row.forEach((pixel, x) => {
-        if (!pixels[y]) {
-          pixels[y] = [new Array<number>()]
-        }
-        if (!pixels[y][x]) {
-          pixels[y][x] = new Array<number>()
-        }
         pixels[y][x][z] = pixel
       })
     })
   })
 
-  const encoded = [new Array<number>()]
+  const encoded = initMatrix(WIDTH, HEIGHT, -1)
 
   for (const y of range(0, HEIGHT)) {
     for (const x of range(0, WIDTH)) {
-      const values = pixels[y][x].reverse()
-      const value = reduce(
-        (acc, cur) => {
-          if (cur === 0 || cur === 1) {
-            return reduced(cur)
-          }
-          return acc
-        },
-        2,
-        values
-      )
+      const value = pixels[y][x]
+        .reverse()
+        .find(v => v === 0 || v === 1)
 
-      if (!encoded[y]) {
-        encoded[y] = new Array<number>()
-      }
-
-      encoded[y][x] = value
+      encoded[y][x] = defaultTo(2, value)
     }
   }
 
-  const rendered = encoded
+  return encoded
     .map(row => row.join(''))
     .join('\n')
+}
 
-  return rendered
+function initMatrix(
+  width: number,
+  height: number,
+  fill: number
+): number[][] {
+  const array = [new Array<number>()]
+
+  for (const y of range(0, height)) {
+    for (const x of range(0, width)) {
+      if (!array[y]) {
+        array[y] = new Array<number>()
+      }
+
+      array[y][x] = fill
+    }
+  }
+
+  return array
+}
+
+function initTensor(
+  width: number,
+  height: number,
+  depth: number,
+  fill: number
+): number[][][] {
+  const array = [[new Array<number>()]]
+
+  for (const y of range(0, height)) {
+    for (const x of range(0, width)) {
+      for (const z of range(0, depth)) {
+        if (!array[y]) {
+          array[y] = [new Array<number>()]
+        }
+
+        if (!array[y][x]) {
+          array[y][x] = new Array<number>()
+        }
+
+        array[y][x][z] = fill
+      }
+    }
+  }
+
+  return array
 }
 
 export default main
