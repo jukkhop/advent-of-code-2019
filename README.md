@@ -2,13 +2,14 @@
 
 Here are my solutions to AoC 2019 challenges. The code is written in TypeScript, and [Ramda](https://ramdajs.com/) is used for functional approaches where applicable.
 
-### Personal leaderboard  
+### Personal statistics
 
-(didn't really compete before day 4 though)
+(didn't compete before day 4 though)
 
 ```
       --------Part 1--------   --------Part 2--------
 Day       Time   Rank  Score       Time   Rank  Score
+  9   01:20:50   1689      0   01:22:37   1662      0
   8   00:24:39   1717      0   00:48:05   1734      0
   7   00:38:56   1435      0   03:19:22   2038      0
   6   01:31:28   3512      0   01:55:38   3158      0
