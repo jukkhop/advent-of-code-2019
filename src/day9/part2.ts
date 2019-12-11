@@ -6,7 +6,14 @@ function main([input]: string[]) {
     .filter(Boolean)
     .map(BigInt)
 
-  return run(program, [BigInt(2)])
+  const memory = program.slice()
+  const pointers: [number, number] = [0, 0]
+  const inputs = [BigInt(2)]
+  const output = new Array<BigInt>()
+
+  run(memory, pointers, inputs, output)
+
+  return output
 }
 
 export default main

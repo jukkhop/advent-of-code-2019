@@ -1,5 +1,9 @@
 /* eslint-disable no-loop-func */
+/* eslint-disable no-param-reassign */
 
+import { defaultTo } from 'ramda'
+
+const TERM_SIGNAL = Number.MAX_SAFE_INTEGER
 const READ = 0
 const WRITE = 1
 
@@ -21,18 +25,23 @@ function main([input]: string[]) {
     .filter(Boolean)
     .map(BigInt)
 
-  return run(program, [BigInt(1)])
+  const memory = program.slice()
+  const pointers: [number, number] = [0, 0]
+  const inputs = [BigInt(1)]
+  const output = new Array<BigInt>()
+
+  run(memory, pointers, inputs, output)
+
+  return output
 }
 
 function run(
-  program: BigInt[],
-  inputs: BigInt[]
-): BigInt[] {
-  const memory = program.slice()
-  const output = new Array<BigInt>()
-
-  let pointer = 0
-  let relative = 0
+  memory: BigInt[],
+  pointers: [number, number],
+  inputs: BigInt[],
+  output: BigInt[]
+): [number, number] {
+  let [pointer, relative] = pointers
 
   while (pointer < memory.length) {
     const next = memory[pointer].toString().split('')
@@ -55,6 +64,7 @@ function run(
     } else if ([5, 6].includes(opcode)) {
       incr = 3
     } else if (opcode === 99) {
+      pointer = TERM_SIGNAL
       break
     } else {
       throw new Error(`Bad opcode: ${opcode}`)
@@ -85,48 +95,57 @@ function run(
 
         throw new Error(`Bad mode: ${mode}`)
       })
+      .map(defaultTo(BigInt(0)))
 
-    pointer += incr
-
-    const [v0, v1] = values // eslint-disable-line
-    const [v0n, v1n, v2n] = values.map(Number) // eslint-disable-line
+    const [v0, v1] = values
+    const [v0n, v1n, v2n] = values.map(Number)
 
     switch (opcode) {
       case 1:
         memory[v2n] = BigInt(v0n + v1n)
+        pointer += incr
         break
       case 2:
         memory[v2n] = BigInt(v0n * v1n)
+        pointer += incr
         break
       case 3:
+        if (inputs.length === 0) {
+          return [pointer, relative]
+        }
         memory[v0n] = BigInt(inputs.shift() || 0)
+        pointer += incr
         break
       case 4:
         output.push(v0)
+        pointer += incr
         break
       case 5:
-        if (v0n !== 0) pointer = v1n
+        pointer = v0n !== 0 ? v1n : pointer + incr
         break
       case 6:
-        if (v0n === 0) pointer = v1n
+        pointer = v0n === 0 ? v1n : pointer + incr
         break
       case 7:
         memory[v2n] = BigInt(v0 < v1 ? 1 : 0)
+        pointer += incr
         break
       case 8:
         memory[v2n] = BigInt(v0 === v1 ? 1 : 0)
+        pointer += incr
         break
       case 9:
         relative += v0n
+        pointer += incr
         break
       default:
         throw new Error('Failed to match opcode')
     }
   }
 
-  return output
+  return [pointer, relative]
 }
 
 export default main
 
-export { run }
+export { run, TERM_SIGNAL }

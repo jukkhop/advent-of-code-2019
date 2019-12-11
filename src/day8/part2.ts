@@ -1,8 +1,4 @@
-import {
-  defaultTo,
-  range,
-  splitEvery
-} from 'ramda'
+import { defaultTo, range, splitEvery } from 'ramda'
 
 const WIDTH = 25
 const HEIGHT = 6
@@ -10,10 +6,7 @@ const HEIGHT = 6
 function main([input]: string[]) {
   const digits = input.split('').map(Number)
 
-  const layers = splitEvery(
-    WIDTH * HEIGHT,
-    digits
-  )
+  const layers = splitEvery(WIDTH * HEIGHT, digits)
 
   const pixels = initTensor(
     WIDTH,
@@ -44,22 +37,20 @@ function main([input]: string[]) {
     }
   }
 
-  return encoded
-    .map(row => row.join(''))
-    .join('\n')
+  return encoded.map(row => row.join('')).join('\n')
 }
 
-function initMatrix(
+function initMatrix<T>(
   width: number,
   height: number,
-  fill: number
-): number[][] {
-  const array = [new Array<number>()]
+  fill: T
+): T[][] {
+  const array = [new Array<T>()]
 
   for (const y of range(0, height)) {
     for (const x of range(0, width)) {
       if (!array[y]) {
-        array[y] = new Array<number>()
+        array[y] = new Array<T>()
       }
 
       array[y][x] = fill
@@ -97,3 +88,5 @@ function initTensor(
 }
 
 export default main
+
+export { initMatrix }

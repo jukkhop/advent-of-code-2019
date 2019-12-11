@@ -9,6 +9,7 @@ Here are my solutions to AoC 2019 challenges. The code is written in TypeScript,
 ```
       --------Part 1--------   --------Part 2--------
 Day       Time   Rank  Score       Time   Rank  Score
+ 11   01:49:05   2272      0   02:19:56   2308      0
  10   01:14:58   1509      0   03:50:22   1785      0
   9   01:20:50   1689      0   01:22:37   1662      0
   8   00:24:39   1717      0   00:48:05   1734      0
